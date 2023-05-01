@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    container_name: app.todo
+    depends_on:
+      - db
+    environment:
+      - PORT=8080
+      - DATABASE_URL=postgres://local:local@db.todo:5432/todo?sslmode=disable
+    ports: 
+      - 8080:8080
+
+  db:
+    image: "postgres:13"
+    container_name: db.todo
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=local
+      - POSTGRES_PASSWORD=local
+      - POSTGRES_DB=todo
+
+
+networks:
+  default:
+    name: todo-stack
+
